@@ -8,15 +8,47 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 - List at least two concrete bugs you noticed at the start  
   (for example: "the hints were backwards").
 
+When I first ran the game, the Streamlit interface loaded correctly, but several parts of the game logic behaved incorrectly. I noticed that one attempt was already counted before I submitted my first guess, some higher/lower hints pointed in the wrong direction, and the score could increase even after an incorrect guess. I also noticed that changing the difficulty did not fully reset the current game state. I used the Developer Debug Info section to compare the secret number, attempts, score, and history while reproducing these problems.
+
+### Initial Bug Reproduction Trace
+
+```text
+Normal difficulty
+Range: 1 to 100
+Attempts allowed: 8
+
+Before making a guess:
+Attempts left: 7
+Developer Attempts: 1
+Score: 0
+History: []
+
+Hint test:
+Secret: 49
+Guess: 50
+Expected: Go LOWER!
+Actual: Go HIGHER!
+
+Scoring test:
+An incorrect high guess caused the score to increase to 5.
+
+Difficulty test:
+Changed difficulty from Normal to Easy.
+Easy displayed range: 1 to 20
+Secret remained: 49
+Previous attempts and history also remained.
+```
+
 **Bug Reproduction Log**
 
 Document at least 3 bugs you found. Add rows as needed.
 
-| Input | Expected Behavior | Actual Behavior | Console Output / Error |
-|-------|-------------------|-----------------|------------------------|
-| | | | |
-| | | | |
-| | | | |
+| Input / Trigger | Expected Behavior | Actual Behavior | Console Output / Error | Suspected Code Location |
+| --- | --- | --- | --- | --- |
+| Start a Normal game without entering a guess | The game allows 8 attempts, so it should begin with 8 attempts left and 0 attempts used | The game started with only 7 attempts left and Developer Debug Info showed Attempts = 1 | `Attempts left: 7`, `Attempts: 1`, `History: []` | `app.py`, session-state initialization for `attempts` |
+| Secret = 49, enter guess = 50 | Since 50 is greater than 49, the game should tell the player to go LOWER | The game displayed `Go HIGHER!` | No exception; incorrect hint displayed | `app.py`, `check_guess()` |
+| Enter an incorrect guess that is higher than the secret | A wrong guess should not increase the score | The score increased by 5 after an incorrect high guess | Developer Debug Info showed `Score: 5` | `app.py`, `update_score()` |
+| Change difficulty from Normal to Easy during the game | The game state should match Easy mode and the secret should be within the displayed range of 1 to 20 | The mode changed to Easy, but the secret stayed at 49 and previous attempts/history remained | `Difficulty: Easy`, `Range: 1 to 20`, `Secret: 49` | `app.py`, difficulty and session-state handling |
 
 ---
 
