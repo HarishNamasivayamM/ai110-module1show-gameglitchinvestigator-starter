@@ -58,6 +58,7 @@ Document at least 3 bugs you found. Add rows as needed.
 - Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).
 - Give one example of an AI suggestion you did not accept as written (including what the AI suggested, why you rejected or changed it, and how you verified your version). It does not have to be a suggestion that was wrong: over-engineered, out of scope, harder to read, or a poor fit for this codebase all count.
 
+I used ChatGPT as an AI teammate while investigating and fixing the game bugs. One correct suggestion was to reverse the HIGHER and LOWER hint messages in `check_guess()`, because a guess above the secret should tell the player to go lower and a guess below it should tell the player to go higher. I verified this change using manual game testing and pytest cases for guesses above and below the secret. ChatGPT initially suggested fixing the problem by only swapping the hint messages, but I did not accept that as the complete fix because testing showed that some comparisons were still wrong when the secret was converted to a string on alternating attempts. I kept the correct hint change, revised the solution by keeping the secret as an integer for every comparison, and then verified the final version with four passing pytest tests and a live Streamlit run.
 ---
 
 ## 3. Debugging and testing your fixes
@@ -67,11 +68,15 @@ Document at least 3 bugs you found. Add rows as needed.
   and what it showed you about your code.
 - Did AI help you design or understand any tests? How?
 
+I decided a bug was fixed only after checking the behavior both manually in the Streamlit game and with automated tests. For example, after fixing the hint logic, I tested guesses above and below the secret to confirm the game returned `Go LOWER!` and `Go HIGHER!` correctly, and I also added pytest cases for those outcomes. I updated the test suite to match the refactored `check_guess()` function, which returns both an outcome and a hint message, and then ran `python -m pytest -v`. All four tests passed, including a test confirming that an incorrect guess deducts 5 points instead of increasing the score. ChatGPT helped me identify useful test cases, but I used the actual test results and live game behavior to decide whether each fix was correct.
+
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
 - How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
+
+Streamlit reruns the Python script from top to bottom whenever the user interacts with a widget, such as submitting a guess or changing a setting. Regular variables would normally be recreated during each rerun, so `st.session_state` is used to preserve values such as the secret number, score, attempts, status, and guess history between interactions. I saw this behavior while debugging because some values shown near the top of the page could reflect the state before later button-processing code updated them during that same run. This helped me understand why session state is important for keeping a Streamlit game consistent across multiple user actions.
 
 ---
 
@@ -81,3 +86,5 @@ Document at least 3 bugs you found. Add rows as needed.
   - This could be a testing habit, a prompting strategy, or a way you used Git.
 - What is one thing you would do differently next time you work with AI on a coding task?
 - In one or two sentences, describe how this project changed the way you think about AI generated code.
+
+One habit I want to reuse is reproducing a bug first, writing down the expected and actual behavior, and then making one small fix at a time instead of changing many things at once. Next time I work with AI, I would test each suggestion earlier instead of assuming that a logically correct-looking change completely solves the problem. This project showed me that AI-generated code can be useful, but it still needs careful review, testing, and human judgment before it can be trusted. I also learned that keeping clear Git commits and test evidence makes it much easier to understand what changed and verify that the program still works.
