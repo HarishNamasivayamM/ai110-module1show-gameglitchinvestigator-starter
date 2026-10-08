@@ -69,21 +69,33 @@ No warnings or errors reported.
 
 ---
 
+
 ## Model Comparison (SF11)
 
-> Compare two AI models on the same task.
+> Compare two AI models on the same debugging task.
 
 **Task given to both models:**
 
-<!-- Describe what you asked each model to do -->
+```text
+Act as a Python debugging assistant.
+
+Review this buggy guessing-game logic:
+
+if guess > secret:
+    return "Too High", "📈 Go HIGHER!"
+else:
+    return "Too Low", "📉 Go LOWER!"
+
+Explain the bug and provide the simplest Pythonic fix. Do not redesign the function or add unnecessary features. Also briefly explain why your fix is correct.
+```
 
 | | Model A | Model B |
-|-|---------|---------|
-| **Model name** | | |
-| **Response summary** | | |
-| **More Pythonic?** | | |
-| **Clearer explanation?** | | |
+| --- | --- | --- |
+| **Model name** | ChatGPT | Claude |
+| **Response summary** | ChatGPT identified that the HIGHER and LOWER hint messages were reversed. It recommended keeping the existing comparison logic and swapping only the two direction messages. | Claude identified the same reversed-hint bug and recommended the same message swap. Claude also noted that equality should be handled separately if a correct guess is not already checked earlier in the function. |
+| **More Pythonic?** | Yes. ChatGPT stayed focused on the smallest change needed for the existing function and did not redesign the logic. | Also Pythonic, but Claude included an additional equality-case consideration that was not necessary for this project because equality was already handled earlier in `check_guess()`. |
+| **Clearer explanation?** | ChatGPT gave a concise explanation showing why each direction needed to be reversed. | Claude's explanation was slightly more detailed because it explained both comparison branches and also checked whether equality had already been handled. |
 
 **Which did you prefer and why?**
 
-<!-- Your conclusion -->
+I preferred ChatGPT's solution for this specific task because it stayed closest to the request for the simplest possible fix and matched the existing structure of the game. Both models identified the same core bug and produced the same correct HIGHER/LOWER change. Claude's explanation was slightly more thorough because it mentioned the possible equality issue, but that additional change was unnecessary in this project because `check_guess()` already checks whether the guess equals the secret before performing the higher/lower comparison.
