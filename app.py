@@ -99,7 +99,8 @@ if submit:
         st.error(err)
     else:
         st.session_state.history.append(guess_int)
-         # FIX: Keep the secret as an integer so guesses are always compared numerically.
+
+        # FIX: Keep the secret as an integer for numeric comparisons.
         secret = st.session_state.secret
 
         outcome, message = check_guess(guess_int, secret)

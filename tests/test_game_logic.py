@@ -1,5 +1,6 @@
 from logic_utils import check_guess, parse_guess, update_score
 
+
 def test_winning_guess():
     """A guess equal to the secret should return a win."""
     outcome, message = check_guess(50, 50)
@@ -33,6 +34,7 @@ def test_wrong_guess_deducts_score():
     )
 
     assert result == -5
+
 
 def test_empty_guess_is_rejected():
     """Empty input should be rejected without crashing."""

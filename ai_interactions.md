@@ -36,23 +36,36 @@
 
 ## Linting & Style (SF9)
 
+
 > Document your use of AI for linting or code style improvements.
 
 **Prompt used:**
 
-```
-<!-- Paste the prompt you gave the AI -->
+```text
+Review app.py, logic_utils.py, and tests/test_game_logic.py for PEP 8 style issues. Explain the pycodestyle warnings and suggest minimal formatting changes without changing the program's behavior.
 ```
 
 **Linting output before:**
 
-```
-<!-- Paste relevant linter warnings/errors -->
+```text
+app.py:102:10: E114 indentation is not a multiple of 4 (comment)
+app.py:102:10: E116 unexpected indentation (comment)
+app.py:102:80: E501 line too long (89 > 79 characters)
+tests/test_game_logic.py:3:1: E302 expected 2 blank lines, found 1
+tests/test_game_logic.py:37:1: E302 expected 2 blank lines, found 1
+tests/test_game_logic.py:61:25: W292 no newline at end of file
 ```
 
 **Changes applied:**
 
-<!-- Describe what you changed based on the AI's suggestions -->
+I corrected the indentation of the FIX comment in `app.py` and shortened the comment to stay within the PEP 8 line-length limit. I added the required blank lines between top-level test functions in `tests/test_game_logic.py` and added a newline at the end of the file. The functions in `logic_utils.py` already contained docstrings, so I reviewed them and kept them because they clearly describe each function's purpose. These formatting changes did not alter the game logic.
+
+**Linting output after:**
+
+```text
+$ python -m pycodestyle app.py logic_utils.py tests/test_game_logic.py
+No warnings or errors reported.
+```
 
 ---
 
