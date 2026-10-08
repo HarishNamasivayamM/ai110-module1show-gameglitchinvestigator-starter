@@ -59,6 +59,7 @@ Document at least 3 bugs you found. Add rows as needed.
 - Give one example of an AI suggestion you did not accept as written (including what the AI suggested, why you rejected or changed it, and how you verified your version). It does not have to be a suggestion that was wrong: over-engineered, out of scope, harder to read, or a poor fit for this codebase all count.
 
 I used ChatGPT as an AI teammate while investigating and fixing the game bugs. One correct suggestion was to reverse the HIGHER and LOWER hint messages in `check_guess()`, because a guess above the secret should tell the player to go lower and a guess below it should tell the player to go higher. I verified this change using manual game testing and pytest cases for guesses above and below the secret. ChatGPT initially suggested fixing the problem by only swapping the hint messages, but I did not accept that as the complete fix because testing showed that some comparisons were still wrong when the secret was converted to a string on alternating attempts. I kept the correct hint change, revised the solution by keeping the secret as an integer for every comparison, and then verified the final version with four passing pytest tests and a live Streamlit run.
+
 ---
 
 ## 3. Debugging and testing your fixes

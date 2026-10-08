@@ -94,7 +94,7 @@ The additional tests cover:
 - Non-numeric input `"hello"`
 - Negative-number input `"-5"`
 
-All three edge-case tests pass successfully along with the four core tests.
+All three edge-case tests are included in the final 16-test suite, and all tests pass successfully.
 
 ### Enhanced Game UI
 
