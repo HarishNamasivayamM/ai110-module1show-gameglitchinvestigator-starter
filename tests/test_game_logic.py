@@ -1,5 +1,4 @@
-from logic_utils import check_guess, update_score
-
+from logic_utils import check_guess, parse_guess, update_score
 
 def test_winning_guess():
     """A guess equal to the secret should return a win."""
@@ -34,3 +33,29 @@ def test_wrong_guess_deducts_score():
     )
 
     assert result == -5
+
+def test_empty_guess_is_rejected():
+    """Empty input should be rejected without crashing."""
+    ok, value, error = parse_guess("")
+
+    assert ok is False
+    assert value is None
+    assert error == "Enter a guess."
+
+
+def test_non_numeric_guess_is_rejected():
+    """Non-numeric text should return a clear validation error."""
+    ok, value, error = parse_guess("hello")
+
+    assert ok is False
+    assert value is None
+    assert error == "That is not a number."
+
+
+def test_negative_number_is_parsed_safely():
+    """A negative integer string should be parsed without crashing."""
+    ok, value, error = parse_guess("-5")
+
+    assert ok is True
+    assert value == -5
+    assert error is None

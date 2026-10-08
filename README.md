@@ -2,53 +2,86 @@
 
 ## 🚨 The Situation
 
-You asked an AI to build a simple "Number Guessing Game" using Streamlit.
-It wrote the code, ran away, and now the game is unplayable. 
+Game Glitch Investigator is a Streamlit number-guessing game that was intentionally provided with several logic and state bugs. The goal of the project was to reproduce the bugs, identify their causes, use AI suggestions critically, repair the game, and verify the fixes with automated and manual testing.
 
-- You can't win.
-- The hints lie to you.
-- The secret number seems to have commitment issues.
+During testing, I found issues involving incorrect HIGHER/LOWER hints, an attempt counter that started at 1 instead of 0, inconsistent numeric comparisons, scoring that could reward an incorrect guess, and game-state problems when changing difficulty.
 
 ## 🛠️ Setup
 
-1. Install dependencies: `pip install -r requirements.txt`
-2. Run the broken app: `python -m streamlit run app.py`
+1. Install dependencies:
 
-## 🕵️‍♂️ Your Mission
+```bash
+pip install -r requirements.txt
+```
 
-1. **Play the game.** Open the "Developer Debug Info" tab in the app to see the secret number. Try to win.
-2. **Find the State Bug.** Why does the secret number change every time you click "Submit"? Ask ChatGPT: *"How do I keep a variable from resetting in Streamlit when I click a button?"*
-3. **Fix the Logic.** The hints ("Higher/Lower") are wrong. Fix them.
-4. **Refactor & Test.** - Move the logic into `logic_utils.py`.
-   - Run `pytest` in your terminal.
-   - Keep fixing until all tests pass!
+2. Run the app:
 
-## 📝 Document Your Experience
+```bash
+python -m streamlit run app.py
+```
 
-- [ ] Describe the game's purpose.
-- [ ] Detail which bugs you found.
-- [ ] Explain what fixes you applied.
+3. Run the automated tests:
+
+```bash
+python -m pytest -v
+```
+
+## 🐛 Bugs Found
+
+- The game started Normal difficulty with only 7 attempts remaining even though 8 attempts were allowed.
+- HIGHER and LOWER hint messages were reversed.
+- The secret number was converted to a string on alternating attempts, which could cause incorrect comparisons.
+- Some incorrect `Too High` guesses increased the score by 5 points instead of deducting points.
+- Changing difficulty could leave game state from the previous difficulty, including a secret number outside the newly displayed range.
+
+## 🔧 Fixes Applied
+
+- Corrected the HIGHER and LOWER hint directions in `check_guess()`.
+- Kept the secret number as an integer so guesses are compared numerically.
+- Changed the initial attempt count from `1` to `0`.
+- Updated incorrect guesses so they consistently deduct 5 points.
+- Refactored reusable game logic from `app.py` into `logic_utils.py`.
+- Updated and expanded the pytest suite to verify the repaired behavior.
 
 ## 📸 Demo Walkthrough
 
-Describe your fixed game in numbered steps so a reader can follow along without watching a video:
-
-1. <!-- Describe this step -->
-2. <!-- Describe this step -->
-3. <!-- Describe this step -->
-4. <!-- Describe this step -->
-5. <!-- Add more steps as needed -->
-
-**Screenshot** *(optional)*: <!-- Insert a screenshot of your fixed, winning game here -->
+1. The player starts a Normal game with 8 attempts available.
+2. The Developer Debug Info section can be opened to inspect the secret number and current game state during testing.
+3. If the secret is 50 and the player guesses 60, the game returns `Go LOWER!`.
+4. If the player then guesses 40, the game returns `Go HIGHER!`.
+5. Each incorrect guess deducts 5 points and uses exactly one attempt.
+6. When the player enters the correct secret number, the game displays `Correct!` and ends with a final score.
+7. The game logic continues to work after being refactored into `logic_utils.py`, as verified by the automated test suite.
 
 ## 🧪 Test Results
 
-```
-# Paste your pytest output here, e.g.:
-# pytest tests/
-# ========================= X passed in 0.XXs =========================
+The final test suite includes the original game-logic tests plus additional AI-assisted edge-case tests for empty input, non-numeric input, and negative-number input.
+
+```text
+platform win32 -- Python 3.13.12, pytest-9.1.1, pluggy-1.6.0
+collected 7 items
+
+tests/test_game_logic.py::test_winning_guess PASSED
+tests/test_game_logic.py::test_guess_too_high PASSED
+tests/test_game_logic.py::test_guess_too_low PASSED
+tests/test_game_logic.py::test_wrong_guess_deducts_score PASSED
+tests/test_game_logic.py::test_empty_guess_is_rejected PASSED
+tests/test_game_logic.py::test_non_numeric_guess_is_rejected PASSED
+tests/test_game_logic.py::test_negative_number_is_parsed_safely PASSED
+
+7 passed in 0.06s
 ```
 
 ## 🚀 Stretch Features
 
-- [ ] [If you choose to complete Challenge 4, describe the Enhanced UI changes here — a screenshot is optional]
+### Advanced Edge-Case Testing
+
+I used AI assistance to identify three additional input edge cases and documented the prompts and reasoning in `ai_interactions.md`.
+
+The additional tests cover:
+
+- Empty input `""`
+- Non-numeric input `"hello"`
+- Negative-number input `"-5"`
+
+All three edge-case tests pass successfully along with the four core tests.

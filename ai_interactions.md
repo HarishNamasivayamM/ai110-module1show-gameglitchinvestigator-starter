@@ -27,10 +27,10 @@
 > Document how you used AI to help generate or improve tests.
 
 | Edge Case | Prompt Used | AI-Suggested Test | Did It Pass? | Your Reasoning |
-|-----------|-------------|-------------------|--------------|----------------|
-| | | | | |
-| | | | | |
-| | | | | |
+| --- | --- | --- | --- | --- |
+| Empty input `""` | Review `parse_guess()` and generate a pytest test for empty user input. | Verify that an empty string returns `False`, `None`, and `"Enter a guess."` without crashing. | Yes | Empty input is a common user action and should be handled gracefully instead of causing an exception. |
+| Non-numeric input `"hello"` | Review `parse_guess()` and generate a pytest test for non-numeric text. | Verify that `"hello"` returns `False`, `None`, and `"That is not a number."` | Yes | Users may enter letters instead of numbers, so the parser should reject them cleanly. |
+| Negative input `"-5"` | Review `parse_guess()` and generate a pytest test for a negative integer. | Verify that `"-5"` is safely parsed as the integer `-5` without crashing. | Yes | Negative values are outside the normal game range, but the parser should still handle the input predictably. |
 
 ---
 
