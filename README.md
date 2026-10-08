@@ -79,6 +79,8 @@ tests/test_game_logic.py::test_new_game_state_resets_game_and_excludes_high_scor
 tests/test_game_logic.py::test_new_game_secret_within_difficulty_range PASSED
 
 16 passed in 0.04s
+```
+
 
 ## 🚀 Stretch Features
 
