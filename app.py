@@ -3,6 +3,7 @@ import streamlit as st
 
 from logic_utils import (
     check_guess,
+    get_proximity_hint,
     get_range_for_difficulty,
     parse_guess,
     update_score,
@@ -107,6 +108,10 @@ if submit:
 
         if show_hint:
             st.warning(message)
+
+            if outcome != "Win":
+                proximity = get_proximity_hint(guess_int, secret)
+                st.info(proximity)
 
         st.session_state.score = update_score(
             current_score=st.session_state.score,

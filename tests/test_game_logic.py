@@ -1,4 +1,9 @@
-from logic_utils import check_guess, parse_guess, update_score
+from logic_utils import (
+    check_guess,
+    get_proximity_hint,
+    parse_guess,
+    update_score,
+)
 
 
 def test_winning_guess():
@@ -61,3 +66,10 @@ def test_negative_number_is_parsed_safely():
     assert ok is True
     assert value == -5
     assert error is None
+
+
+def test_proximity_hints():
+    """Proximity hints should reflect distance from the secret."""
+    assert get_proximity_hint(48, 50) == "🔥 Hot! You're very close."
+    assert get_proximity_hint(40, 50) == "🌤️ Warm! You're getting closer."
+    assert get_proximity_hint(20, 50) == "❄️ Cold! You're still far away."

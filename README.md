@@ -85,3 +85,13 @@ The additional tests cover:
 - Negative-number input `"-5"`
 
 All three edge-case tests pass successfully along with the four core tests.
+
+### Enhanced Game UI
+
+I added proximity-based feedback to make the guessing experience more interactive. The new `get_proximity_hint()` function in `logic_utils.py` compares the player's guess with the secret number and displays one of three user-friendly hints:
+
+- 🔥 **Hot** when the guess is within 5 numbers of the secret.
+- 🌤️ **Warm** when the guess is within 15 numbers of the secret.
+- ❄️ **Cold** when the guess is more than 15 numbers away.
+
+The function is called from `app.py` after an incorrect guess, so the player now receives both the HIGHER/LOWER direction hint and a proximity hint. I manually tested all three states and confirmed that the existing game behavior continued to work.

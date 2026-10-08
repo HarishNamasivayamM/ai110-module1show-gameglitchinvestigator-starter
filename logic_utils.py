@@ -50,3 +50,15 @@ def update_score(current_score: int, outcome: str, attempt_number: int):
         return current_score - 5
 
     return current_score
+
+
+def get_proximity_hint(guess: int, secret: int):
+    """Return a user-friendly hint based on distance from the secret."""
+    distance = abs(secret - guess)
+
+    if distance <= 5:
+        return "🔥 Hot! You're very close."
+    if distance <= 15:
+        return "🌤️ Warm! You're getting closer."
+
+    return "❄️ Cold! You're still far away."
