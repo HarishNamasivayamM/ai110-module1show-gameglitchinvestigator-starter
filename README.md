@@ -95,3 +95,19 @@ I added proximity-based feedback to make the guessing experience more interactiv
 - ❄️ **Cold** when the guess is more than 15 numbers away.
 
 The function is called from `app.py` after an incorrect guess, so the player now receives both the HIGHER/LOWER direction hint and a proximity hint. I manually tested all three states and confirmed that the existing game behavior continued to work.
+
+### 🏆 High Score Tracker
+
+The sidebar shows the best winning score achieved during the current Streamlit session (or "No wins yet" before the first win).
+
+- Only winning games count toward the high score; losses never change it.
+- Clicking **New Game** resets attempts, score, status, and guess history, and picks a new secret within the currently selected difficulty range, while keeping the high score.
+- The high score lives in `st.session_state`, so it resets when the browser session ends.
+
+The reusable logic lives in `logic_utils.py`:
+
+- `update_high_score()` returns the new high score after a game ends.
+- `format_high_score()` formats the value for display.
+- `new_game_state()` builds fresh per-game state without touching the high score.
+
+These functions are covered by additional pytest tests in `tests/test_game_logic.py`.

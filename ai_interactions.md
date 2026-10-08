@@ -6,19 +6,19 @@
 
 ## Agent Workflow (SF8)
 
-> Document your experience using an AI agent (e.g., Cursor Agent, Claude, Copilot) to make multi-step changes autonomously.
+> Document your experience using an AI agent to make multi-step changes autonomously.
 
 **What task did you give the agent?**
 
-<!-- Describe the goal you asked the agent to accomplish -->
+I asked Claude Code Agent Mode to implement a High Score tracker for the existing Streamlit guessing game. The agent was instructed to inspect the current project first, preserve the existing HIGHER/LOWER and Hot/Warm/Cold behavior, keep reusable logic in `logic_utils.py`, add automated tests, update the README, follow PEP 8, and run both pytest and pycodestyle. I also specifically instructed the agent not to create a Git commit so I could review the changes manually before accepting them.
 
 **What did the agent do?**
 
-<!-- List the steps the agent took (files edited, commands run, etc.) -->
+Claude inspected `app.py`, `logic_utils.py`, `tests/test_game_logic.py`, and `README.md` before making changes. It added reusable high-score functions to `logic_utils.py`, initialized and displayed the high score in `app.py`, updated the score when a player wins, and preserved the high score when a new game starts. It also improved the New Game behavior so attempts, score, status, and history reset correctly and the new secret is generated within the selected difficulty range. The agent added eight automated tests for the high-score and New Game behavior, updated the README, ran the full pytest suite with 16 passing tests, and ran pycodestyle with no reported issues.
 
 **What did you have to verify or fix manually?**
 
-<!-- Describe anything the agent got wrong or that required human review -->
+I reviewed the agent's changes instead of accepting them automatically and checked that the existing direction hints and Hot/Warm/Cold feature were not removed. No manual code correction was required for the High Score implementation because the automated tests and linting passed. The first headless Streamlit smoke test failed because the temporary test script could not import `logic_utils`, so the agent reran the smoke test with the project root added to `PYTHONPATH`; the second run passed and confirmed that the high score remained after starting a new game. I still manually reviewed the diff and game behavior before committing the agent's changes.
 
 ---
 

@@ -1,3 +1,6 @@
+import random
+
+
 def get_range_for_difficulty(difficulty: str):
     """Return the inclusive number range for the selected difficulty."""
     if difficulty == "Easy":
@@ -62,3 +65,41 @@ def get_proximity_hint(guess: int, secret: int):
         return "🌤️ Warm! You're getting closer."
 
     return "❄️ Cold! You're still far away."
+
+
+def update_high_score(high_score, final_score: int, won: bool):
+    """Return the new high score after a game ends.
+
+    Only winning games count. ``high_score`` is ``None`` until the
+    player has won at least once this session.
+    """
+    if not won:
+        return high_score
+
+    if high_score is None or final_score > high_score:
+        return final_score
+
+    return high_score
+
+
+def format_high_score(high_score):
+    """Return a display-friendly string for the high score."""
+    if high_score is None:
+        return "No wins yet"
+
+    return str(high_score)
+
+
+def new_game_state(low: int, high: int, rng=random):
+    """Return fresh per-game state with a secret in [low, high].
+
+    The high score is intentionally not included so it survives
+    across new games.
+    """
+    return {
+        "secret": rng.randint(low, high),
+        "attempts": 0,
+        "score": 0,
+        "status": "playing",
+        "history": [],
+    }

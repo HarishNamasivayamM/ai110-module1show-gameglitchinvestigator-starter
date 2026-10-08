@@ -3,9 +3,12 @@ import streamlit as st
 
 from logic_utils import (
     check_guess,
+    format_high_score,
     get_proximity_hint,
     get_range_for_difficulty,
+    new_game_state,
     parse_guess,
+    update_high_score,
     update_score,
 )
 
@@ -50,6 +53,17 @@ if "status" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+if "high_score" not in st.session_state:
+    # None means the player has not won a game yet this session.
+    st.session_state.high_score = None
+
+st.sidebar.header("🏆 High Score")
+high_score_display = st.sidebar.empty()
+high_score_display.metric(
+    "Best winning score",
+    format_high_score(st.session_state.high_score),
+)
+
 st.subheader("Make a guess")
 
 st.info(
@@ -78,8 +92,9 @@ with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
 if new_game:
-    st.session_state.attempts = 0
-    st.session_state.secret = random.randint(1, 100)
+    # Reset per-game state only; high_score is preserved.
+    for key, value in new_game_state(low, high).items():
+        st.session_state[key] = value
     st.success("New game started.")
     st.rerun()
 
@@ -122,6 +137,15 @@ if submit:
         if outcome == "Win":
             st.balloons()
             st.session_state.status = "won"
+            st.session_state.high_score = update_high_score(
+                high_score=st.session_state.high_score,
+                final_score=st.session_state.score,
+                won=True,
+            )
+            high_score_display.metric(
+                "Best winning score",
+                format_high_score(st.session_state.high_score),
+            )
             st.success(
                 f"You won! The secret was {st.session_state.secret}. "
                 f"Final score: {st.session_state.score}"
