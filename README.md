@@ -55,11 +55,11 @@ python -m pytest -v
 
 ## 🧪 Test Results
 
-The final test suite includes the original game-logic tests plus additional AI-assisted edge-case tests for empty input, non-numeric input, and negative-number input.
+The final test suite verifies the repaired core game logic, AI-assisted edge cases, proximity hints, High Score behavior, and New Game state handling.
 
 ```text
 platform win32 -- Python 3.13.12, pytest-9.1.1, pluggy-1.6.0
-collected 7 items
+collected 16 items
 
 tests/test_game_logic.py::test_winning_guess PASSED
 tests/test_game_logic.py::test_guess_too_high PASSED
@@ -68,9 +68,17 @@ tests/test_game_logic.py::test_wrong_guess_deducts_score PASSED
 tests/test_game_logic.py::test_empty_guess_is_rejected PASSED
 tests/test_game_logic.py::test_non_numeric_guess_is_rejected PASSED
 tests/test_game_logic.py::test_negative_number_is_parsed_safely PASSED
+tests/test_game_logic.py::test_proximity_hints PASSED
+tests/test_game_logic.py::test_first_win_sets_high_score PASSED
+tests/test_game_logic.py::test_higher_win_replaces_high_score PASSED
+tests/test_game_logic.py::test_lower_win_keeps_high_score PASSED
+tests/test_game_logic.py::test_loss_does_not_change_high_score PASSED
+tests/test_game_logic.py::test_negative_winning_score_is_recorded PASSED
+tests/test_game_logic.py::test_format_high_score PASSED
+tests/test_game_logic.py::test_new_game_state_resets_game_and_excludes_high_score PASSED
+tests/test_game_logic.py::test_new_game_secret_within_difficulty_range PASSED
 
-7 passed in 0.06s
-```
+16 passed in 0.04s
 
 ## 🚀 Stretch Features
 
